@@ -1,3 +1,11 @@
+# Latex #
+#########
+*.log
+*.aux
+*.blg
+*.bbl
+*.synctex.gz
+
 # Compiled source #
 ###################
 *.com
