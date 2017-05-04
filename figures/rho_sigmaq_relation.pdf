@@ -2651,7 +2651,7 @@ endobj
 /Widths 31 0 R /LastChar 127 /FirstChar 0 >>
 endobj
 3 0 obj
-<< /F4 20 0 R /F2 28 0 R /F5 32 0 R /F3 16 0 R /F1 24 0 R >>
+<< /F2 28 0 R /F3 16 0 R /F4 20 0 R /F1 24 0 R /F5 32 0 R >>
 endobj
 4 0 obj
 << /A1 << /CA 0 /Type /ExtGState /ca 1 >>
@@ -2664,20 +2664,7 @@ endobj
 << >>
 endobj
 7 0 obj
-<< /M0 12 0 R /M2 14 0 R /M1 13 0 R >>
-endobj
-12 0 obj
-<< /Subtype /Form /Length 25 /Type /XObject
-/BBox [ -3.25 -0.25 3.25 0.25 ] >>
-stream
-1 j
-0 J
-3 -0 m
--3 0 l
-
-B
-
-endstream
+<< /M2 14 0 R /M0 12 0 R /M1 13 0 R >>
 endobj
 14 0 obj
 << /Subtype /Form /Length 371 /Type /XObject /BBox [ -1 -1 1 1 ] >>
@@ -2700,6 +2687,19 @@ f
 
 endstream
 endobj
+12 0 obj
+<< /Subtype /Form /Length 25 /Type /XObject
+/BBox [ -3.25 -0.25 3.25 0.25 ] >>
+stream
+1 j
+0 J
+3 -0 m
+-3 0 l
+
+B
+
+endstream
+endobj
 13 0 obj
 << /Subtype /Form /Length 25 /Type /XObject
 /BBox [ -3.25 -0.25 3.25 0.25 ] >>
@@ -2717,7 +2717,7 @@ endobj
 << /Count 1 /Kids [ 10 0 R ] /Type /Pages >>
 endobj
 35 0 obj
-<< /CreationDate (D:20170424205958-04'00')
+<< /CreationDate (D:20170504012407-04'00')
 /Producer (matplotlib pdf backend)
 /Creator (matplotlib 1.5.1, http://matplotlib.org) >>
 endobj
@@ -2735,9 +2735,9 @@ xref
 0000000389 00000 n 
 0000000208 00000 n 
 0000016870 00000 n 
-0000193137 00000 n 
+0000193610 00000 n 
 0000193748 00000 n 
-0000193275 00000 n 
+0000193137 00000 n 
 0000016892 00000 n 
 0000049948 00000 n 
 0000017429 00000 n 
