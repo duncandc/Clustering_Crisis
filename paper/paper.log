@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.6)  2 MAY 2017 14:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.6)  4 MAY 2017 00:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -459,8 +459,6 @@ LaTeX Font Info:    Try loading font information for T1+aess on input line 86.
 (/usr/local/texlive/2015basic/texmf-dist/tex/latex/ae/t1aess.fd
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
 )
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 LaTeX Font Info:    Try loading font information for OMS+aer on input line 93.
 
 (/usr/local/texlive/2015basic/texmf-dist/tex/latex/ae/omsaer.fd
@@ -487,7 +485,10 @@ LaTeX Font Info:    Try loading font information for T1+aett on input line 102.
 
 (/usr/local/texlive/2015basic/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
-) [2 <./figures/venn_diagram.pdf>]
+)
+Underfull \vbox (badness 3746) has occurred while \output is active []
+
+ [2 <./figures/venn_diagram.pdf>]
 Overfull \hbox (4.17462pt too wide) in paragraph at lines 151--151
 []\T1/aer/m/n/8 name| 
  []
@@ -520,10 +521,8 @@ File: figures/wp_comparison.pdf Graphic file (type pdf)
 <use figures/wp_comparison.pdf>
 Package pdftex.def Info: figures/wp_comparison.pdf used on input line 348.
 (pdftex.def)             Requested size: 502.27527pt x 198.742pt.
-
-Underfull \vbox (badness 1163) has occurred while \output is active []
-
- [5 <./figures/stellar_mass_function.pdf>] [6 <./figures/wp_comparison.pdf>]
+ [5 <./figures/stellar_mass_function.pdf>]
+[6 <./figures/wp_comparison.pdf>]
 <figures/f_sat_mstar.pdf, id=165, 238.49101pt x 238.49101pt>
 File: figures/f_sat_mstar.pdf Graphic file (type pdf)
 
@@ -569,237 +568,256 @@ LaTeX Warning: Float too large for page by 12.02367pt on input line 471.
 File: figures/mstar_of_z_rm.pdf Graphic file (type pdf)
 
 <use figures/mstar_of_z_rm.pdf>
-Package pdftex.def Info: figures/mstar_of_z_rm.pdf used on input line 492.
+Package pdftex.def Info: figures/mstar_of_z_rm.pdf used on input line 487.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
+Underfull \hbox (badness 10000) in paragraph at lines 487--488
+[][]
+ []
+
+<figures/stellar_mass_zform.pdf, id=257, 238.49101pt x 549.25201pt>
+File: figures/stellar_mass_zform.pdf Graphic file (type pdf)
+
+<use figures/stellar_mass_zform.pdf>
+Package pdftex.def Info: figures/stellar_mass_zform.pdf used on input line 493.
+
+(pdftex.def)             Requested size: 238.49042pt x 549.25067pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 493--494
 [][]
  []
 
 
-<figures/stellar_mass_function_evolution.pdf, id=257, 502.27649pt x 198.7425pt>
+<figures/stellar_mass_function_evolution.pdf, id=258, 502.27649pt x 198.7425pt>
 File: figures/stellar_mass_function_evolution.pdf Graphic file (type pdf)
 <use figures/stellar_mass_function_evolution.pdf>
 Package pdftex.def Info: figures/stellar_mass_function_evolution.pdf used on in
-put line 498.
+put line 505.
 (pdftex.def)             Requested size: 502.27527pt x 198.742pt.
  [9 <./figures/mstar_of_z_rm.pdf>]
-<figures/sub_fraction_and_completeness.pdf, id=281, 238.49101pt x 411.939pt>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package natbib Warning: Citation `Diemer:2017gj' on page 10 undefined on input 
+line 532.
+
+[10 <./figures/stellar_mass_zform.pdf>]
+<figures/sub_fraction_and_completeness.pdf, id=305, 238.49101pt x 411.939pt>
 File: figures/sub_fraction_and_completeness.pdf Graphic file (type pdf)
 
 <use figures/sub_fraction_and_completeness.pdf>
 Package pdftex.def Info: figures/sub_fraction_and_completeness.pdf used on inpu
-t line 530.
+t line 541.
 (pdftex.def)             Requested size: 238.49042pt x 411.93797pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 530--531
+Underfull \hbox (badness 10000) in paragraph at lines 541--542
 [][]
  []
 
-<figures/wp_comparison_w_orphans.pdf, id=282, 502.27649pt x 198.7425pt>
+<figures/wp_comparison_w_orphans.pdf, id=306, 502.27649pt x 198.7425pt>
 File: figures/wp_comparison_w_orphans.pdf Graphic file (type pdf)
 
 <use figures/wp_comparison_w_orphans.pdf>
 Package pdftex.def Info: figures/wp_comparison_w_orphans.pdf used on input line
- 536.
+ 547.
 (pdftex.def)             Requested size: 502.27527pt x 198.742pt.
 
-<figures/wp_comparison_clone_profile_2.pdf, id=283, 238.49101pt x 238.49101pt>
+<figures/wp_comparison_clone_profile_2.pdf, id=307, 238.49101pt x 238.49101pt>
 File: figures/wp_comparison_clone_profile_2.pdf Graphic file (type pdf)
 
 <use figures/wp_comparison_clone_profile_2.pdf>
 Package pdftex.def Info: figures/wp_comparison_clone_profile_2.pdf used on inpu
-t line 542.
+t line 553.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 542--543
+Underfull \hbox (badness 10000) in paragraph at lines 553--554
 [][]
  []
 
-[10 <./figures/stellar_mass_function_evolution.pdf>]
-Underfull \vbox (badness 1838) has occurred while \output is active []
-
-
-Underfull \hbox (badness 6332) in paragraph at lines 576--580
+[11 <./figures/stellar_mass_function_evolution.pdf>]
+Underfull \hbox (badness 6332) in paragraph at lines 587--591
 \T1/aer/m/n/9 We find a good fit with $\OML/cmm/m/it/9 f[] \OT1/cmr/m/n/9 = 0\O
 ML/cmm/m/it/9 :\OT1/cmr/m/n/9 105 \OMS/cmsy/m/n/9 ^^F \OT1/cmr/m/n/9 0\OML/cmm/
 m/it/9 :\OT1/cmr/m/n/9 006$\T1/aer/m/n/9 ,
  []
 
-[11 <./figures/sub_fraction_and_completeness.pdf>]
+[12 <./figures/sub_fraction_and_completeness.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [12 <./figures/wp_comparison_w_orphans.pdf>]
-<figures/sat_growth_model.pdf, id=384, 238.49101pt x 238.49101pt>
+<figures/sat_growth_model.pdf, id=361, 238.49101pt x 238.49101pt>
 File: figures/sat_growth_model.pdf Graphic file (type pdf)
 
 <use figures/sat_growth_model.pdf>
-Package pdftex.def Info: figures/sat_growth_model.pdf used on input line 616.
+Package pdftex.def Info: figures/sat_growth_model.pdf used on input line 627.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 616--617
+Underfull \hbox (badness 10000) in paragraph at lines 627--628
 [][]
  []
 
-<figures/wp_sat_growth_comparison.pdf, id=385, 502.27649pt x 198.7425pt>
+<figures/wp_sat_growth_comparison.pdf, id=362, 502.27649pt x 198.7425pt>
 File: figures/wp_sat_growth_comparison.pdf Graphic file (type pdf)
 
 <use figures/wp_sat_growth_comparison.pdf>
 Package pdftex.def Info: figures/wp_sat_growth_comparison.pdf used on input lin
-e 622.
+e 633.
 (pdftex.def)             Requested size: 502.27527pt x 198.742pt.
- [13 <./figures/wp_comparison_clone_profile_2.pdf> <./figures/sat_growth_model.
-pdf
+ [13 <./figures/wp_comparison_w_orphans.pdf>] [14 <./figures/wp_comparison_clon
+e_profile_2.pdf> <./figures/sat_growth_model.pdf
 
 pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures/sat_growth_model.p
 df): PDF inclusion: multiple pdfs with page group included in a single page
->] <figures/scatter_model.pdf, id=429, 238.49101pt x 238.49101pt>
+>] <figures/scatter_model.pdf, id=462, 238.49101pt x 238.49101pt>
 File: figures/scatter_model.pdf Graphic file (type pdf)
 
 <use figures/scatter_model.pdf>
-Package pdftex.def Info: figures/scatter_model.pdf used on input line 653.
+Package pdftex.def Info: figures/scatter_model.pdf used on input line 664.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 653--654
+Underfull \hbox (badness 10000) in paragraph at lines 664--665
 [][]
  []
 
-<figures/smhm_assem_bias.pdf, id=430, 238.49101pt x 238.49101pt>
+<figures/smhm_assem_bias.pdf, id=463, 238.49101pt x 238.49101pt>
 File: figures/smhm_assem_bias.pdf Graphic file (type pdf)
 
 <use figures/smhm_assem_bias.pdf>
-Package pdftex.def Info: figures/smhm_assem_bias.pdf used on input line 659.
+Package pdftex.def Info: figures/smhm_assem_bias.pdf used on input line 670.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 659--660
+Underfull \hbox (badness 10000) in paragraph at lines 670--671
 [][]
  []
 
-<figures/wp_comparison_assem_bias.pdf, id=431, 502.27649pt x 198.7425pt>
+<figures/wp_comparison_assem_bias.pdf, id=464, 502.27649pt x 198.7425pt>
 File: figures/wp_comparison_assem_bias.pdf Graphic file (type pdf)
 
 <use figures/wp_comparison_assem_bias.pdf>
 Package pdftex.def Info: figures/wp_comparison_assem_bias.pdf used on input lin
-e 665.
+e 676.
 (pdftex.def)             Requested size: 502.27527pt x 198.742pt.
- [14 <./figures/wp_sat_growth_comparison.pdf>]
+
 
 LaTeX Warning: Reference `sec:rank_scatter' on page 15 undefined on input line 
-677.
+688.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [15 <./figures/scatter_model.pdf> <./figures/smhm_assem_bias.pdf
+[15 <./figures/wp_sat_growth_comparison.pdf>] [16 <./figures/scatter_model.pdf>
+ <./figures/smhm_assem_bias.pdf
 
 pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures/smhm_assem_bias.pd
 f): PDF inclusion: multiple pdfs with page group included in a single page
->] [16 <./figures/wp_comparison_assem_bias.pdf>]
+>] [17 <./figures/wp_comparison_assem_bias.pdf>]
 
-Package natbib Warning: Citation `Vogelsberger:2014gw' on page 17 undefined on 
-input line 775.
+Package natbib Warning: Citation `Vogelsberger:2014gw' on page 18 undefined on 
+input line 786.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17]
-(./paper.bbl
-Underfull \vbox (badness 2253) has occurred while \output is active []
 
- [18])
-<figures/growth_hist.pdf, id=564, 502.27649pt x 224.037pt>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18]
+(./paper.bbl [19]) <figures/growth_hist.pdf, id=598, 502.27649pt x 224.037pt>
 File: figures/growth_hist.pdf Graphic file (type pdf)
 
 <use figures/growth_hist.pdf>
-Package pdftex.def Info: figures/growth_hist.pdf used on input line 802.
+Package pdftex.def Info: figures/growth_hist.pdf used on input line 813.
 (pdftex.def)             Requested size: 502.27527pt x 224.03644pt.
- [19]
+ [20]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [20 <./figures/growth_hist.pdf>]
-<figures/wp_comparison_zacc_prime_2.pdf, id=608, 238.49101pt x 238.49101pt>
+ [21 <./figures/growth_hist.pdf>]
+<figures/wp_comparison_zacc_prime_2.pdf, id=640, 238.49101pt x 238.49101pt>
 File: figures/wp_comparison_zacc_prime_2.pdf Graphic file (type pdf)
 
 <use figures/wp_comparison_zacc_prime_2.pdf>
 Package pdftex.def Info: figures/wp_comparison_zacc_prime_2.pdf used on input l
-ine 895.
+ine 906.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 895--896
+Underfull \hbox (badness 10000) in paragraph at lines 906--907
 [][]
  []
 
-[21 <./figures/wp_comparison_zacc_prime_2.pdf>]
-<figures/mstar_fconv.pdf, id=638, 238.49101pt x 238.49101pt>
+<figures/mstar_fconv.pdf, id=641, 238.49101pt x 238.49101pt>
 File: figures/mstar_fconv.pdf Graphic file (type pdf)
 
 <use figures/mstar_fconv.pdf>
-Package pdftex.def Info: figures/mstar_fconv.pdf used on input line 934.
+Package pdftex.def Info: figures/mstar_fconv.pdf used on input line 945.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 934--935
+Underfull \hbox (badness 10000) in paragraph at lines 945--946
 [][]
  []
 
-<figures/subhalo_positions.pdf, id=639, 238.49101pt x 433.62pt>
+
+Underfull \vbox (badness 1406) has occurred while \output is active []
+
+ [22 <./figures/wp_comparison_zacc_prime_2.pdf> <./figures/mstar_fconv.pdf
+
+pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures/mstar_fconv.pdf): 
+PDF inclusion: multiple pdfs with page group included in a single page
+>] <figures/subhalo_positions.pdf, id=684, 238.49101pt x 433.62pt>
 File: figures/subhalo_positions.pdf Graphic file (type pdf)
 
 <use figures/subhalo_positions.pdf>
-Package pdftex.def Info: figures/subhalo_positions.pdf used on input line 957.
+Package pdftex.def Info: figures/subhalo_positions.pdf used on input line 968.
 (pdftex.def)             Requested size: 238.49042pt x 433.61894pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 957--958
+Underfull \hbox (badness 10000) in paragraph at lines 968--969
 [][]
  []
 
 
-Underfull \hbox (badness 1107) in paragraph at lines 958--958
+Underfull \hbox (badness 1107) in paragraph at lines 969--969
 []\T1/aer/bx/n/8 Figure C1. []\T1/aer/m/n/8 The pro-jected dis-tri-bu-tion of s
 ub-haloes with
  []
 
-[22 <./figures/mstar_fconv.pdf>]
-<figures/rho_sigma.pdf, id=657, 238.49101pt x 238.49101pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23 <./figures/subhalo_positions.pdf>]
+<figures/rho_sigma.pdf, id=727, 238.49101pt x 238.49101pt>
 File: figures/rho_sigma.pdf Graphic file (type pdf)
 
 <use figures/rho_sigma.pdf>
-Package pdftex.def Info: figures/rho_sigma.pdf used on input line 1033.
+Package pdftex.def Info: figures/rho_sigma.pdf used on input line 1044.
 (pdftex.def)             Requested size: 238.49042pt x 238.49042pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1033--1034
+Underfull \hbox (badness 10000) in paragraph at lines 1044--1045
 [][]
  []
 
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1045.
-[23 <./figures/subhalo_positions.pdf> <./figures/rho_sigma.pdf
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1056.
 
-pdfTeX warning: /Library/TeX/texbin/pdflatex (file ./figures/rho_sigma.pdf): PD
-F inclusion: multiple pdfs with page group included in a single page
->]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1045.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [24 <./figures/rho_sigma.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1056.
  (./paper.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1045.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1045.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1056.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1056.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1045.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1056.
  ) 
 Here is how much of TeX's memory you used:
- 8025 strings out of 494501
- 112693 string characters out of 6167030
- 251415 words of memory out of 5000000
- 11113 multiletter control sequences out of 15000+600000
+ 8033 strings out of 494501
+ 112901 string characters out of 6167030
+ 251294 words of memory out of 5000000
+ 11120 multiletter control sequences out of 15000+600000
  55522 words of font info for 121 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 36i,17n,34p,1736b,567s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,17n,34p,1736b,627s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx12.pfb></usr/local/texlive/2015basic/texmf-dist/fonts/type1/public/amsfonts/
@@ -838,10 +856,10 @@ nts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2015basic/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2015basic/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2015basic/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on paper.pdf (23 pages, 10308400 bytes).
+Output written on paper.pdf (24 pages, 10303057 bytes).
 PDF statistics:
- 810 PDF objects out of 1000 (max. 8388607)
- 626 compressed objects within 7 object streams
+ 841 PDF objects out of 1000 (max. 8388607)
+ 655 compressed objects within 7 object streams
  0 named destinations out of 1000 (max. 500000)
- 106 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 111 words of extra memory for PDF output out of 10000 (max. 10000000)
 

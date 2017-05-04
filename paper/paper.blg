@@ -3,6 +3,7 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: paper.aux
 The style file: mnras.bst
 Database file #1: bib.bib
+Warning--I didn't find a database entry for "Diemer:2017gj"
 Warning--I didn't find a database entry for "Vogelsberger:2014gw"
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
@@ -132,45 +133,45 @@ Warning--empty journal in vandenBosch:2014tl
 "ArXiv e-prints" is a string literal, `journal' is a missing field
 ---they aren't the same literal types for entry vandenBosch:2014tl
 while executing---line 1822 of file mnras.bst
-You've used 99 entries,
+You've used 100 entries,
             2881 wiz_defined-function locations,
-            1307 strings with 29881 characters,
-and the built_in function-call counts, 47365 in all, are:
-= -- 3745
-> -- 3785
-< -- 218
-+ -- 1616
-- -- 612
-* -- 5458
-:= -- 7611
+            1315 strings with 30118 characters,
+and the built_in function-call counts, 47846 in all, are:
+= -- 3785
+> -- 3822
+< -- 220
++ -- 1631
+- -- 618
+* -- 5512
+:= -- 7689
 add.period$ -- 0
-call.type$ -- 99
-change.case$ -- 198
-chr.to.int$ -- 94
-cite$ -- 117
-duplicate$ -- 2276
-empty$ -- 2206
-format.name$ -- 932
-if$ -- 8201
+call.type$ -- 100
+change.case$ -- 200
+chr.to.int$ -- 95
+cite$ -- 118
+duplicate$ -- 2299
+empty$ -- 2228
+format.name$ -- 940
+if$ -- 8285
 int.to.chr$ -- 6
 int.to.str$ -- 0
-missing$ -- 99
-newline$ -- 310
-num.names$ -- 718
-pop$ -- 458
+missing$ -- 100
+newline$ -- 313
+num.names$ -- 726
+pop$ -- 462
 preamble$ -- 1
-purify$ -- 396
+purify$ -- 400
 quote$ -- 0
-skip$ -- 1425
+skip$ -- 1439
 stack$ -- 0
-substring$ -- 2534
-swap$ -- 1248
-text.length$ -- 400
+substring$ -- 2562
+swap$ -- 1262
+text.length$ -- 404
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 891
+type$ -- 900
 warning$ -- 18
-while$ -- 726
+while$ -- 734
 width$ -- 0
-write$ -- 967
+write$ -- 977
 (There were 36 error messages)

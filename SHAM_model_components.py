@@ -244,12 +244,12 @@ class ParamSmHm(object):
         if  'scatter' in list(kwargs.keys()):
             sigma = kwargs['scatter']
         else:
-            sigma =  self.param_dict['scatter']
+            sigma =  self.param_dict['sigma']
         
-        log_y0 = self.exp_model(sigma, self.param_dict['x_1'], self.param_dict['alpha_1'], self.param_dict['b_1'])
-        log_x0 = self.exp_model(sigma, self.param_dict['x_2'], self.param_dict['alpha_2'], self.param_dict['b_2'])
-        alpha = self.exp_model(sigma, self.param_dict['x_3'], self.param_dict['alpha_3'], self.param_dict['b_3'])
-        beta = self.exp_model(sigma, self.param_dict['x_4'], self.param_dict['alpha_4'], self.param_dict['b_4'])
+        log_y0 = self.exp_model(sigma, self.param_dict['x_1'], self.param_dict['alpha_1'], self.param_dict['b_1'], self.param_dict['a_1'])
+        log_x0 = self.exp_model(sigma, self.param_dict['x_2'], self.param_dict['alpha_2'], self.param_dict['b_2'], self.param_dict['a_2'])
+        alpha = self.exp_model(sigma, self.param_dict['x_3'], self.param_dict['alpha_3'], self.param_dict['b_3'], self.param_dict['a_3'])
+        beta = self.exp_model(sigma, self.param_dict['x_4'], self.param_dict['alpha_4'], self.param_dict['b_4'], self.param_dict['a_4'])
         
         y0 = 10.0**log_y0
         x0 = 10.0**log_x0
@@ -277,34 +277,42 @@ class ParamSmHm(object):
             Dictionary containing parameter values.
         """
         
-        if self._prim_haloprop_key is 'halo_vpeak':
-            d = {'x_1': 0.476,
-                 'alpha_1':2.11,
-                 'b_1':8.99,
-                 'x_2': 0.505,
-                 'alpha_2':2.85,
-                 'b_2':1.17,
-                 'x_3': 0.215,
-                 'alpha_3':1.06,
-                 'b_3':-5.72,
-                 'x_4': 0.318,
-                 'alpha_4':2.00,
-                 'b_4':-1.20,
+        if self._prim_haloprop_key is 'halo_mpeak':
+            d = {'x_1': 0.867,
+                 'alpha_1':2.26,
+                 'b_1':8.92,
+                 'a_1':1.0,
+                 'x_2': 0.925,
+                 'alpha_2':2.09,
+                 'b_2':10.63,
+                 'a_2':1.0,
+                 'x_3': 1.51,
+                 'alpha_3':1.61,
+                 'b_3':-2.16,
+                 'a_3':1.0,
+                 'x_4': 0.538,
+                 'alpha_4':2.38,
+                 'b_4':-0.395,
+                 'a_4':1.0,
                  'sigma':scatter
                 }
-        elif self._prim_haloprop_key is 'halo_mpeak':
+        elif self._prim_haloprop_key is 'halo_vpeak':
             d = {'x_1': 0.476,
                  'alpha_1':2.11,
                  'b_1':8.99,
+                 'a_1':1,
                  'x_2': 0.505,
                  'alpha_2':2.85,
                  'b_2':1.17,
+                 'a_2':1,
                  'x_3': 0.215,
                  'alpha_3':1.06,
                  'b_3':-5.72,
+                 'a_3':1,
                  'x_4': 0.318,
                  'alpha_4':2.00,
                  'b_4':-1.20,
+                 'a_4':1,
                  'sigma':scatter
                 }
         return d
