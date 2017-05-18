@@ -4,6 +4,7 @@ Files:
 SHAM_model_components.py contains classes for rank order SHAM models
 SMHM_model_components.py contains classes for evolving SMHM models
 Halo_model_components.py contains classes for dark component models
+make_fiducial_SHAM_mocks.py creates a fiducial mock for each model
 utils.py contains some utility functions used in this work
 cosmo_utils.py contains some cosmology functions
 default.py contains some default filepaths
