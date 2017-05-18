@@ -1,10 +1,11 @@
-#Repository for "The Galaxy Clustering Crisis in Abundance Matching"
+# Repository for "The Galaxy Clustering Crisis in Abundance Matching"
 
 Files:
 SHAM_model_components.py contains classes for rank order SHAM models
 SMHM_model_components.py contains classes for evolving SMHM models
+Halo_model_components.py contains classes for dark component models
 utils.py contains some utility functions used in this work
-cosmo.py contains some cosmology functions
+cosmo_utils.py contains some cosmology functions
 default.py contains some default filepaths
 
 Directories
