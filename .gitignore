@@ -1,4 +1,5 @@
-figures/
+figures/*.pdf
+figures/*.png
 
 # Latex #
 #########
