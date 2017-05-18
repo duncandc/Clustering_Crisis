@@ -14,7 +14,7 @@ from warnings import warn
 
 
 __all__ = ['MosterSmHm13', 'BehrooziSmHm13', 'Yang12SmHm',
-           'Bell_to_Blanton', 'Kauffmann_to_Blanton', 'Moustakas_to_Blanton']
+           'Bell_to_Blanton', 'Kauffmann_to_Blanton', 'Moustakas_to_Blanton','Guo_to_Blanton','Yang_correction']
 
 class MosterSmHm13(object):
     """ 
@@ -861,3 +861,139 @@ class Moustakas_to_Blanton(object):
         delta_m = a1 + a2*np.tanh((m-a3)/a4)
         
         return 10.0**(m + delta_m)*self.littleh**2.0
+
+
+class Guo_to_Blanton(object):
+    """
+    Undo the tranformation suggested by Guo et al. (2010) which transforms the stellar 
+    masses based on the SDSS r-band Petrosian magnitudes to ones based on 
+    SDSS r-band model magnitudes. 
+    """
+    def __init__(self,
+                 haloprop_keys = [],
+                 **kwargs):
+        """
+        Parameters
+        ----------
+        """
+        
+        self._mock_generation_calling_sequence = ['assign_new_stellar_masses']
+        self._galprop_dtypes_to_allocate = np.dtype([])
+        self.list_of_haloprops_needed = haloprop_keys
+        
+        self.param_dict = self.retrieve_default_param_dict()
+    
+    def assign_new_stellar_masses(self, **kwargs):
+        """
+        assign new stellar masses
+        """
+        table = kwargs['table']
+        
+        new_mstar = self.convert_stellar_mass(table=table)
+        table['stellar_mass'] = new_mstar
+        
+    def retrieve_default_param_dict(self):
+        """ 
+        Method returns a dictionary of parameters
+        
+        Returns
+        -------
+        d : dict
+            Dictionary containing parameter values.
+        """
+        
+        d = {'f':0.9
+             }
+        
+        return d
+    
+    def convert_stellar_mass(self, **kwargs):
+        """
+        multiply stellar mass by a constant factor
+        
+        Parameters
+        ----------
+        stellar_mass : array_like
+            Bell et al. stellar mass(es) in $h^{-2} M_{\odot}$
+        
+        Returns
+        -------
+        stellar_mass : array_like
+            Blanton \& Roweis stellar mass(es) in $h^{-2} M_{\odot}$
+        """
+        
+        if 'table' in list(kwargs.keys()):
+            m = np.log10(kwargs['table']['stellar_mass'])
+        elif 'stellar_mass' in list(kwargs.keys()):
+            m = np.log10(kwargs['stellar_mass'])
+        
+        f = self.param_dict['f']
+        
+        return f*10.0**(m)
+
+
+class Yang_correction(object):
+    """
+    correct Yang et al. (2012) stellar masses by multiplying by a factor of h=0.7 
+    """
+    def __init__(self,
+                 haloprop_keys = [],
+                 **kwargs):
+        """
+        Parameters
+        ----------
+        """
+        
+        self._mock_generation_calling_sequence = ['correct_stellar_masses']
+        self._galprop_dtypes_to_allocate = np.dtype([])
+        self.list_of_haloprops_needed = haloprop_keys
+        
+        self.param_dict = self.retrieve_default_param_dict()
+    
+    def correct_stellar_masses(self, **kwargs):
+        """
+        assign new stellar masses
+        """
+        table = kwargs['table']
+        
+        new_mstar = self.convert_stellar_mass(table=table)
+        table['stellar_mass'] = new_mstar
+        
+    def retrieve_default_param_dict(self):
+        """ 
+        Method returns a dictionary of parameters
+        
+        Returns
+        -------
+        d : dict
+            Dictionary containing parameter values.
+        """
+        
+        d = {'f':0.7
+             }
+        
+        return d
+    
+    def convert_stellar_mass(self, **kwargs):
+        """
+        multiply stellar mass by a constant factor
+        
+        Parameters
+        ----------
+        stellar_mass : array_like
+            Bell et al. stellar mass(es) in $h^{-2} M_{\odot}$
+        
+        Returns
+        -------
+        stellar_mass : array_like
+            Blanton \& Roweis stellar mass(es) in $h^{-2} M_{\odot}$
+        """
+        
+        if 'table' in list(kwargs.keys()):
+            m = np.log10(kwargs['table']['stellar_mass'])
+        elif 'stellar_mass' in list(kwargs.keys()):
+            m = np.log10(kwargs['stellar_mass'])
+        
+        f = self.param_dict['f']
+        
+        return f*10.0**(m)
