@@ -41,7 +41,7 @@ Fig. 17 : Assembly_Bias.ipynb
 
 Fig. A1 : 
 
-Fig. A2 : 
+Fig. A2 : SHAM_comparison.ipynb
 
 Fig. B1 : 
 
