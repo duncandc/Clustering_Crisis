@@ -1,3 +1,3 @@
 # Figures
 
-This directory us used to store figures created during the analysis
+This directory is used to store figures created during the analysis
