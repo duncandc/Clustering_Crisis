@@ -49,7 +49,12 @@ class RankSmHm(object):
             length of simulation box side
         """
         
-        self._mock_generation_calling_sequence = ['assign_stellar_mass']
+        if 'redshift' in list(kwargs.keys()):
+            self.redshift = kwargs['redshift']
+        else:
+            self.redshift=0.0
+        
+        self._mock_generation_calling_sequence = ['_assign_stellar_mass']
         self._galprop_dtypes_to_allocate = np.dtype([('stellar_mass', 'f4')])
         self.list_of_haloprops_needed = [prim_haloprop_key]
         
@@ -64,7 +69,7 @@ class RankSmHm(object):
         elif self.stellar_mass_function == 'Yang_2012':
             self.sdss_phi = stellar_mass_functions.Yang_2012_phi()
     
-    def assign_stellar_mass(self,  **kwargs):
+    def _assign_stellar_mass(self,  **kwargs):
         """
         assign stellar mass based on halo mass rank
         """
@@ -191,7 +196,7 @@ class ParamSmHm(object):
     """
     class to assign stellar mass based on parameterized dependence on halo mass
     """
-    def __init__(self, prim_haloprop_key = 'halo_mpeak', scatter = 0.0, **kwargs):
+    def __init__(self, prim_haloprop_key = 'halo_mpeak', log_scatter = 0.0, **kwargs):
         """
         Parameters
         ----------
@@ -202,12 +207,17 @@ class ParamSmHm(object):
             fixed log-normal scatter in stellar mass
         """
         
+        if 'redshift' in list(kwargs.keys()):
+            self.redshift = kwargs['redshift']
+        else:
+            self.redshift=0.0
+        
         self._mock_generation_calling_sequence = ['assign_stellar_mass']
         self._galprop_dtypes_to_allocate = np.dtype([('stellar_mass', 'f4')])
         self.list_of_haloprops_needed = [prim_haloprop_key]
         
         self._prim_haloprop_key = prim_haloprop_key
-        self.param_dict = self.retrieve_default_param_dict(scatter)
+        self.param_dict = self.retrieve_default_param_dict(log_scatter)
         
     
     def mean_stellar_mass(self, **kwargs):
@@ -234,15 +244,15 @@ class ParamSmHm(object):
         
         # Retrieve the array storing the mass-like variable
         if 'table' in list(kwargs.keys()):
-            x = kwargs['table'][self.prim_haloprop_key]
+            x = kwargs['table'][self._prim_haloprop_key]
         elif 'prim_haloprop' in list(kwargs.keys()):
             x = kwargs['prim_haloprop']
         else:
             raise KeyError("Must pass one of the following keyword arguments to mean_occupation:\n"
                 "``table`` or ``prim_haloprop``.")
         
-        if  'scatter' in list(kwargs.keys()):
-            sigma = kwargs['scatter']
+        if  'log_scatter' in list(kwargs.keys()):
+            sigma = kwargs['log_scatter']
         else:
             sigma =  self.param_dict['sigma']
         
@@ -265,9 +275,17 @@ class ParamSmHm(object):
         """
         
         table = kwargs['table']
+        Ngal = len(table)
+        
+        mean_log_mstar = np.log10(self.mean_stellar_mass(**kwargs))
+        
+        #add scatter
+        log_mstar =  mean_log_mstar + norm.rvs(loc=0, scale=self.param_dict['sigma'], size=Ngal)
+        
+        table['stellar_mass'] = 10.0**log_mstar
         
     
-    def retrieve_default_param_dict(self, scatter=0.0):
+    def retrieve_default_param_dict(self, log_scatter=0.0):
         """ 
         Method returns a dictionary of all model parameters
         
@@ -294,26 +312,25 @@ class ParamSmHm(object):
                  'alpha_4':2.38,
                  'b_4':-0.395,
                  'a_4':1.0,
-                 'sigma':scatter
+                 'sigma':log_scatter
                 }
         elif self._prim_haloprop_key is 'halo_vpeak':
-            d = {'x_1': 0.476,
-                 'alpha_1':2.11,
-                 'b_1':8.99,
+            d = {'x_1': 1.56066,
+                 'alpha_1':1.69450,
+                 'b_1':8.943279,
                  'a_1':1,
-                 'x_2': 0.505,
-                 'alpha_2':2.85,
-                 'b_2':1.17,
+                 'x_2': 3.34455,
+                 'alpha_2':1.60497,
+                 'b_2':1.17665,
                  'a_2':1,
-                 'x_3': 0.215,
-                 'alpha_3':1.06,
-                 'b_3':-5.72,
+                 'x_3': 1.75682,
+                 'alpha_3':0.97744,
+                 'b_3':-6.9654,
                  'a_3':1,
-                 'x_4': 0.318,
-                 'alpha_4':2.00,
-                 'b_4':-1.20,
+                 'x_4': 0.37405,
+                 'alpha_4':2.0464,
+                 'b_4':-1.2588441,
                  'a_4':1,
-                 'sigma':scatter
+                 'sigma':log_scatter
                 }
         return d
-        

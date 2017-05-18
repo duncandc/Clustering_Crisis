@@ -5,20 +5,18 @@ Module containing classes used in SHAM models that paramaterize the SMHM relatio
 from __future__ import (division, print_function, absolute_import)
 
 import numpy as np
-
+from scipy.stats import norm
 from astropy.table import Table
 from astropy.io import ascii
 from scipy.interpolate import interp1d
-
-from halotools.empirical_models.smhm_models.smhm_helpers import safely_retrieve_redshift
 from halotools.empirical_models import model_helpers as model_helpers
-from halotools.empirical_models.component_model_templates import PrimGalpropModel
+from warnings import warn
 
 
 __all__ = ['MosterSmHm13', 'BehrooziSmHm13', 'Yang12SmHm',
            'Bell_to_Blanton', 'Kauffmann_to_Blanton', 'Moustakas_to_Blanton']
 
-class MosterSmHm13(PrimGalpropModel):
+class MosterSmHm13(object):
     """ 
     Stellar-to-halo-mass relation based on Moster et al. (2013), arXiv:1205.5807
     """
@@ -29,52 +27,185 @@ class MosterSmHm13(PrimGalpropModel):
         ----------
         prim_haloprop_key : string, optional
             String giving the column name of the primary halo property governing stellar mass.
-            Default is set in the `~halotools.empirical_models.model_defaults` module.
         
-        scatter_model : object, optional
-            Class governing stochasticity of stellar mass. Default scatter is log-normal,
-            implemented by the `LogNormalScatterModel` class.
-        
-        scatter_abscissa : array_like, optional
-            Array of values giving the abscissa at which
-            the level of scatter will be specified by the input ordinates.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        scatter_ordinates : array_like, optional
-            Array of values defining the level of scatter at the input abscissa.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        new_haloprop_func_dict : function object, optional
-            Dictionary of function objects used to create additional halo properties
-            that may be needed by the model component.
-            Used strictly by the `MockFactory` during call to the `process_halo_catalog` method.
-            Each dict key of ``new_haloprop_func_dict`` will
-            be the name of a new column of the halo catalog; each dict value is a function
-            object that returns a length-N numpy array when passed a length-N Astropy table
-            via the ``table`` keyword argument.
-            The input ``model`` model object has its own new_haloprop_func_dict;
-            if the keyword argument ``new_haloprop_func_dict`` passed to `MockFactory`
-            contains a key that already appears in the ``new_haloprop_func_dict`` bound to
-            ``model``, and exception will be raised.
-        
+        acc_scale_key : string, optional
+            String givig the column name of the halo property indicating the accretion scale for sub-haloes
         """
+        
+        if 'redshift' in list(kwargs.keys()):
+            self.redshift = kwargs['redshift']
+        else:
+            self.redshift=0.0
         
         kwargs['prim_haloprop_key'] = prim_haloprop_key
         self.prim_haloprop_key = prim_haloprop_key
         kwargs['acc_scale_key'] = acc_scale_key
         self.acc_scale_key = acc_scale_key
         
-        super(MosterSmHm13, self).__init__(
-              galprop_name='stellar_mass', **kwargs)
+        self._mock_generation_calling_sequence = ['_assign_stellar_mass']
+        self._galprop_dtypes_to_allocate = np.dtype([('stellar_mass', 'f4')])
+        
+        self._methods_to_inherit = ['_assign_stellar_mass','mean_stellar_mass']
         
         self.list_of_haloprops_needed = [prim_haloprop_key, acc_scale_key]
-        self.littleh = 0.701
-        self._m_conv_factor = 0.8
         self.param_dict = self.retrieve_default_param_dict()
+        self.littleh = 0.701
         
-        self.publications = ['arXiv:0903.4682', 'arXiv:1205.5807']
+        self.publications = ['arXiv:1205.5807']
+    
+    def mean_stellar_mass(self, **kwargs):
+        """ 
+        Return the stellar mass of a central galaxy as a function
+        of the input table.
+        
+        Parameters
+        ----------
+        prim_haloprop : array, optional
+            Array of mass-like variable upon which occupation statistics are based.
+            If ``prim_haloprop`` is not passed, then ``table`` keyword argument must be passed.
+        
+        halo_acc_scale : array, optional
+            Array of halo accretion scale
+        
+        table : object, optional
+            Data table storing halo catalog.
+            If ``table`` is not passed, then ``prim_haloprop`` keyword argument must be passed.
+        
+        redshift : float or array, optional
+            Redshift of the halo hosting the galaxy.
+            If passing an array, must be of the same length as
+            the ``prim_haloprop`` or ``table`` argument.  Defualt is z=0.0.
+        
+        Returns
+        -------
+        mstar : array_like
+            Array containing stellar masses living in the input table.
+        """
+        
+        # Retrieve the array storing the mass-like variable
+        if 'table' in list(kwargs.keys()):
+            mass = kwargs['table'][self.prim_haloprop_key]
+            acc_scale = kwargs['table'][self.acc_scale_key]
+        elif 'prim_haloprop' in list(kwargs.keys()):
+            mass = kwargs['prim_haloprop']
+            acc_scale = kwargs['halo_acc_scale']
+        else:
+            msg = ("Must pass one of the following keyword arguments to mean_occupation:\n"
+                   "``table`` or ``prim_haloprop`` and ``halo_acc_scale``")
+            raise KeyError(msg)
+        
+        if 'redshift' in list(kwargs.keys()):
+            redshift = kwargs['redshift']
+        else:
+            redshift=0.0
+        
+        mass = mass/self.littleh
+        
+        # compute the parameter values that apply to at a given scale factor
+        a = np.atleast_1d(acc_scale)
+        a_max = 1.0/(1.0+redshift)
+        if np.any(a>a_max):
+            msg = ("Accretion scale is later than the redshift.")
+            warn(msg)
+        
+        m1 = self.param_dict['m10'] + self.param_dict['m11']*(1-a)
+        n = self.param_dict['n10'] + self.param_dict['n11']*(1-a)
+        beta = self.param_dict['beta10'] + self.param_dict['beta11']*(1-a)
+        gamma = self.param_dict['gamma10'] + self.param_dict['gamma11']*(1-a)
+        
+        # Calculate each term contributing to Eqn 2
+        norm = 2.*n*mass
+        m_by_m1 = mass/(10.**m1)
+        denom_term1 = m_by_m1**(-beta)
+        denom_term2 = m_by_m1**gamma
+        
+        mstar = norm / (denom_term1 + denom_term2)
+        
+        return mstar*self.littleh**2
+    
+    def _assign_stellar_mass(self,  **kwargs):
+        """
+        assign stellar mass
+        """
+        
+        table = kwargs['table']
+        Ngal = len(table)
+        
+        mean_log_mstar = np.log10(self.mean_stellar_mass(**kwargs))
+        
+        #add scatter
+        log_mstar =  mean_log_mstar + norm.rvs(loc=0, scale=self.param_dict['log_scatter'], size=Ngal)
+        
+        table['stellar_mass'] = 10.0**log_mstar
+    
+    def retrieve_default_param_dict(self):
+        """ 
+        Method returns a dictionary of all model parameters
+        set to the values in Table 1 of Moster et al. (2013).
+        
+        Returns
+        -------
+        d : dict
+            Dictionary containing parameter values.
+        """
+        
+        # All calculations are done internally using the same h=0.701 units
+        # as in Moster et al. (2013), so the parameter values here are
+        # the same as in Table 1, even though the 
+        # mean_stellar_mass method accepts and returns arguments in h=1 units.
+        
+        d = {
+        'm10': 11.590,
+        'm11': 1.195,
+        'n10': 0.0351,
+        'n11': -0.0247,
+        'beta10': 1.376,
+        'beta11': -0.826,
+        'gamma10': 0.608,
+        'gamma11': 0.329,
+        'log_scatter': 0.2
+        }
+        
+        return d
+
+
+class BehrooziSmHm13(object):
+    """ 
+    Stellar-to-halo-mass relation based on Behroozi et al. (2013), arXiv:1207.6105
+    """
+
+    def __init__(self, prim_haloprop_key='halo_mpeak', acc_scale_key = 'halo_acc_scale', **kwargs):
+        """
+        Parameters
+        ----------
+        prim_haloprop_key : string, optional
+            String giving the column name of the primary halo property governing stellar mass.
+            Default is set in the `~halotools.empirical_models.model_defaults` module.
+        
+        acc_scale_key : string, optional
+            String givig the column name of the halo property indicating the accretion scale for sub-haloes
+        """
+        
+        if 'redshift' in list(kwargs.keys()):
+            self.redshift = kwargs['redshift']
+        else:
+            self.redshift=0.0
+        
+        kwargs['prim_haloprop_key'] = prim_haloprop_key
+        self.prim_haloprop_key = prim_haloprop_key
+        kwargs['acc_scale_key'] = acc_scale_key
+        self.acc_scale_key = acc_scale_key
+        
+        self._mock_generation_calling_sequence = ['_assign_stellar_mass']
+        self._galprop_dtypes_to_allocate = np.dtype([('stellar_mass', 'f4')])
+        
+        self._methods_to_inherit = ['_assign_stellar_mass','mean_stellar_mass']
+        
+        self.list_of_haloprops_needed = [prim_haloprop_key, acc_scale_key]
+        self.param_dict = self.retrieve_default_param_dict()
+        self.littleh = 0.7
+        
+        self.publications = ['arXiv:1207.6105']
     
     def mean_stellar_mass(self, **kwargs):
         """ 
@@ -114,171 +245,23 @@ class MosterSmHm13(PrimGalpropModel):
             mass = kwargs['prim_haloprop']
             acc_scale = kwargs['halo_acc_scale']
         else:
-            raise KeyError("Must pass one of the following keyword arguments to mean_occupation:\n"
-                "``table`` or ``prim_haloprop`` and ``halo_acc_scale``")
+            msg = ("Must pass one of the following keyword arguments to mean_occupation:\n"
+                   "``table`` or ``prim_haloprop`` and ``halo_acc_scale``")
+            raise KeyError(msg)
         
         if 'redshift' in list(kwargs.keys()):
             redshift = kwargs['redshift']
-        elif hasattr(self, 'redshift'):
-            redshift = self.redshift
         else:
-            redshift = sim_defaults.default_redshift
-        
-        #a = 1.0/(1.0+redshift)
-        #a = np.repeat(a, len(mass))
-        
-        mass = mass/self.littleh
-        mass = mass * self._m_conv_factor
-        
-        # compute the parameter values that apply to accretion scale
-        a = np.atleast_1d(acc_scale)
-        
-        m1 = self.param_dict['m10'] + self.param_dict['m11']*(1-a)
-        n = self.param_dict['n10'] + self.param_dict['n11']*(1-a)
-        beta = self.param_dict['beta10'] + self.param_dict['beta11']*(1-a)
-        gamma = self.param_dict['gamma10'] + self.param_dict['gamma11']*(1-a)
-        
-        # Calculate each term contributing to Eqn 2
-        norm = 2.*n*mass
-        m_by_m1 = mass/(10.**m1)
-        denom_term1 = m_by_m1**(-beta)
-        denom_term2 = m_by_m1**gamma
-        
-        mstar = norm / (denom_term1 + denom_term2)
-        
-        return mstar*self.littleh**2
-    
-    
-    def retrieve_default_param_dict(self):
-        """ 
-        Method returns a dictionary of all model parameters
-        set to the values in Table 1 of Moster et al. (2013).
-        
-        Returns
-        -------
-        d : dict
-            Dictionary containing parameter values.
-        """
-        
-        # All calculations are done internally using the same h=0.7 units
-        # as in Behroozi et al. (2010), so the parameter values here are
-        # the same as in Table 1, even though the 
-        # mean_stellar_mass method accepts and returns arguments in h=1 units.
-        
-        d = {
-        'm10': 11.590,
-        'm11': 1.195,
-        'n10': 0.0351,
-        'n11': -0.0247,
-        'beta10': 1.376,
-        'beta11': -0.826,
-        'gamma10': 0.608,
-        'gamma11': 0.329,
-        'scatter_model_param1': 0.2
-        }
-        
-        return d
-
-
-class BehrooziSmHm13(PrimGalpropModel):
-    """ 
-    Stellar-to-halo-mass relation based on Behroozi (2013), arXiv:1207.6105
-    """
-
-    def __init__(self, prim_haloprop_key='halo_mpeak', **kwargs):
-        """
-        Parameters
-        ----------
-        prim_haloprop_key : string, optional
-            String giving the column name of the primary halo property governing stellar mass.
-            Default is set in the `~halotools.empirical_models.model_defaults` module.
-        
-        scatter_model : object, optional
-            Class governing stochasticity of stellar mass. Default scatter is log-normal,
-            implemented by the `LogNormalScatterModel` class.
-        
-        scatter_abscissa : array_like, optional
-            Array of values giving the abscissa at which
-            the level of scatter will be specified by the input ordinates.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        scatter_ordinates : array_like, optional
-            Array of values defining the level of scatter at the input abscissa.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        new_haloprop_func_dict : function object, optional
-            Dictionary of function objects used to create additional halo properties
-            that may be needed by the model component.
-            Used strictly by the `MockFactory` during call to the `process_halo_catalog` method.
-            Each dict key of ``new_haloprop_func_dict`` will
-            be the name of a new column of the halo catalog; each dict value is a function
-            object that returns a length-N numpy array when passed a length-N Astropy table
-            via the ``table`` keyword argument.
-            The input ``model`` model object has its own new_haloprop_func_dict;
-            if the keyword argument ``new_haloprop_func_dict`` passed to `MockFactory`
-            contains a key that already appears in the ``new_haloprop_func_dict`` bound to
-            ``model``, and exception will be raised.
-        
-        """
-        
-        kwargs['prim_haloprop_key'] = prim_haloprop_key
-        
-        super(BehrooziSmHm13, self).__init__(
-              galprop_name='stellar_mass', **kwargs)
-        
-        self.list_of_haloprops_needed = [prim_haloprop_key, 'halo_acc_scale']
-        self.littleh = 0.7
-        self.param_dict = self.retrieve_default_param_dict()
-        
-        self.publications = ['arXiv:1207.6105']
-    
-    def mean_stellar_mass(self, **kwargs):
-        """ 
-        Return the stellar mass of a central galaxy as a function
-        of the input table.
-        
-        Parameters
-        ----------
-        prim_haloprop : array, optional
-            Array of mass-like variable upon which occupation statistics are based.
-            If ``prim_haloprop`` is not passed, then ``table`` keyword argument must be passed.
-        
-        halo_acc_scale : array, optional
-            Array of halo accretion scale
-        
-        table : object, optional
-            Data table storing halo catalog.
-            If ``table`` is not passed, then ``prim_haloprop`` keyword argument must be passed.
-        
-        redshift : float or array, optional
-            Redshift of the halo hosting the galaxy.
-            Default is set in `~halotools.sim_manager.sim_defaults`.
-            If passing an array, must be of the same length as
-            the ``prim_haloprop`` or ``table`` argument.
-        
-        Returns
-        -------
-        mstar : array_like
-            Array containing stellar masses living in the input table.
-        """
-        
-        # Retrieve the array storing the mass-like variable
-        if 'table' in list(kwargs.keys()):
-            mass = kwargs['table'][self.prim_haloprop_key]
-            acc_scale = kwargs['table']['halo_acc_scale']
-        elif 'prim_haloprop' in list(kwargs.keys()):
-            mass = kwargs['prim_haloprop']
-            acc_scale = kwargs['halo_acc_scale']
-        else:
-            raise KeyError("Must pass one of the following keyword arguments to mean_occupation:\n"
-                "``table`` or ``prim_haloprop`` and ``halo_acc_scale``")
+            redshift=0.0
         
         mass = np.atleast_1d(mass)
         mass = mass/self.littleh
         
         a = np.atleast_1d(acc_scale)
+        a_max = 1.0/(1.0+redshift)
+        if np.any(a>a_max):
+            msg = ("Accretion scale is later than the redshift.")
+            warn(msg)
         z = 1.0/a - 1.0
         
         m_10 = self.param_dict['m_10']
@@ -316,6 +299,20 @@ class BehrooziSmHm13(PrimGalpropModel):
         
         return mstar*self.littleh**2
     
+    def _assign_stellar_mass(self,  **kwargs):
+        """
+        assign stellar mass
+        """
+        
+        table = kwargs['table']
+        Ngal = len(table)
+        
+        mean_log_mstar = np.log10(self.mean_stellar_mass(**kwargs))
+        
+        #add scatter
+        log_mstar =  mean_log_mstar + norm.rvs(loc=0, scale=self.param_dict['log_scatter'], size=Ngal)
+        
+        table['stellar_mass'] = 10.0**log_mstar
     
     def retrieve_default_param_dict(self):
         """ 
@@ -352,18 +349,18 @@ class BehrooziSmHm13(PrimGalpropModel):
             'm_hicl0': 12.515,
             'm_hicla': -2.503,
             'rho_0.5':0.799,
-            'scatter_model_param1': 0.218
+            'log_scatter': 0.218
         }
         
         return d
 
 
-class Yang12SmHm(PrimGalpropModel):
+class Yang12SmHm(object):
     """ 
-    Stellar-to-halo-mass relation based on Yang et al. (2012)
+    Stellar-to-halo-mass relation based on Yang et al. (2012), arXiv:1110.1420
     """
     
-    def __init__(self, prim_haloprop_key='halo_mpeak', **kwargs):
+    def __init__(self, prim_haloprop_key='halo_mpeak', acc_scale_key='halo_acc_scale', **kwargs):
         """
         Parameters
         ----------
@@ -371,54 +368,47 @@ class Yang12SmHm(PrimGalpropModel):
             String giving the column name of the primary halo property governing stellar mass.
             Default is set in the `~halotools.empirical_models.model_defaults` module.
         
-        scatter_model : object, optional
-            Class governing stochasticity of stellar mass. Default scatter is log-normal,
-            implemented by the `LogNormalScatterModel` class.
-        
-        scatter_abscissa : array_like, optional
-            Array of values giving the abscissa at which
-            the level of scatter will be specified by the input ordinates.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        scatter_ordinates : array_like, optional
-            Array of values defining the level of scatter at the input abscissa.
-            Default behavior will result in constant scatter at a level set in the
-            `~halotools.empirical_models.model_defaults` module.
-        
-        new_haloprop_func_dict : function object, optional
-            Dictionary of function objects used to create additional halo properties
-            that may be needed by the model component.
-            Used strictly by the `MockFactory` during call to the `process_halo_catalog` method.
-            Each dict key of ``new_haloprop_func_dict`` will
-            be the name of a new column of the halo catalog; each dict value is a function
-            object that returns a length-N numpy array when passed a length-N Astropy table
-            via the ``table`` keyword argument.
-            The input ``model`` model object has its own new_haloprop_func_dict;
-            if the keyword argument ``new_haloprop_func_dict`` passed to `MockFactory`
-            contains a key that already appears in the ``new_haloprop_func_dict`` bound to
-            ``model``, and exception will be raised.
-        
+        acc_scale_key : string, optional
+            String givig the column name of the halo property indicating the 
+            accretion scale for sub-haloes
         """
+        
+        if 'redshift' in list(kwargs.keys()):
+            self.redshift = kwargs['redshift']
+        else:
+            self.redshift=0.0
         
         kwargs['prim_haloprop_key'] = prim_haloprop_key
         
-        #default parameters
-        self._fit_type = 'FIT-CSMF'
-        self._fit_cosmo = 'WMAP7'
-        self._fit_smf = 'SMF2'
+        #default fit parameters
+        if 'fit_type' in list(kwargs.keys()):
+            self._fit_type = kwargs['fit_type']
+        else:
+            self._fit_type = 'FIT-CSMF'
+        if 'fit_cosmo' in list(kwargs.keys()):
+            self._fit_cosmo = kwargs['fit_cosmo']
+        else:
+            self._fit_cosmo = 'WMAP7'
+        if 'fit_smf' in list(kwargs.keys()):
+            self._fit_type = kwargs['fit_smf']
+        else:
+            self._fit_smf = 'SMF2'
         
-        super(Yang12SmHm, self).__init__(
-              galprop_name='stellar_mass', **kwargs)
+        kwargs['prim_haloprop_key'] = prim_haloprop_key
+        self.prim_haloprop_key = prim_haloprop_key
+        kwargs['acc_scale_key'] = acc_scale_key
+        self.acc_scale_key = acc_scale_key
         
-        self.littleh = 1.0
-        self._m_conv_factor = 1.1
-        self._mstar_conv_factor = 0.7
+        self._mock_generation_calling_sequence = ['_assign_stellar_mass']
+        self._galprop_dtypes_to_allocate = np.dtype([('stellar_mass', 'f4')])
         
-        self.list_of_haloprops_needed = [prim_haloprop_key, 'halo_acc_scale']
+        self._methods_to_inherit = ['_assign_stellar_mass','mean_stellar_mass']
+        
+        self.list_of_haloprops_needed = [prim_haloprop_key, acc_scale_key]
         self.param_dict = self.retrieve_default_param_dict()
+        self.littleh = 1.0
         
-        self.publications = ['arXiv:0903.4682', 'arXiv:1205.5807']
+        self.publications = ['arXiv:1110.1420']
     
     def mean_stellar_mass(self, **kwargs):
         """ 
@@ -453,28 +443,29 @@ class Yang12SmHm(PrimGalpropModel):
         # Retrieve the array storing the mass-like variable
         if 'table' in list(kwargs.keys()):
             mass = kwargs['table'][self.prim_haloprop_key]
-            acc_scale = kwargs['table']['halo_acc_scale']
+            acc_scale = kwargs['table'][self.acc_scale_key]
         elif 'prim_haloprop' in list(kwargs.keys()):
             mass = kwargs['prim_haloprop']
             acc_scale = kwargs['halo_acc_scale']
         else:
-            msg = ("Must pass one of the following \n"
-                "keyword arguments to mean_occupation:\n"
-                "``table`` or ``prim_haloprop``")
+            msg = ("Must pass one of the following keyword arguments to mean_occupation:\n"
+                   "``table`` or ``prim_haloprop`` and ``halo_acc_scale``")
             raise KeyError(msg)
         
         if 'redshift' in list(kwargs.keys()):
             redshift = kwargs['redshift']
-        elif hasattr(self, 'redshift'):
-            redshift = self.redshift
         else:
-            redshift = sim_defaults.default_redshift
+            redshift = 0.0
         
         mass = mass/self.littleh
-        mass = mass*self._m_conv_factor
         
         z_now = redshift
         z_acc = 1.0/acc_scale - 1.0
+        
+        a_max = 1.0/(1.0+z_now)
+        if np.any(acc_scale>a_max):
+            msg = ("Accretion scale is later than the redshift.")
+            warn(msg)
         
         #calculate for centrals
         z = z_now
@@ -521,9 +512,23 @@ class Yang12SmHm(PrimGalpropModel):
         #equation 22
         mstar = (1.0-c)*mstar_2 + c*mstar_1
         
-        return mstar*(self.littleh**2)*self._mstar_conv_factor
-
-
+        return mstar*(self.littleh**2)
+    
+    def _assign_stellar_mass(self,  **kwargs):
+        """
+        assign stellar mass
+        """
+        
+        table = kwargs['table']
+        Ngal = len(table)
+        
+        mean_log_mstar = np.log10(self.mean_stellar_mass(**kwargs))
+        
+        #add scatter
+        log_mstar =  mean_log_mstar + norm.rvs(loc=0, scale=self.param_dict['log_scatter'], size=Ngal)
+        
+        table['stellar_mass'] = 10.0**log_mstar
+    
     def retrieve_default_param_dict(self):
         """ 
         Method returns a dictionary of all model parameters
@@ -552,7 +557,7 @@ class Yang12SmHm(PrimGalpropModel):
             'gamma_5':0.01,
             'pt':0.0,
             'c':0.0,
-            'scatter_model_param1': 0.173
+            'log_scatter': 0.173
             }
         elif (fit_type == 'FIT1') & (fit_smf=='SMF2') & (fit_cosmo=='WMAP7'):
             d = {
@@ -567,7 +572,7 @@ class Yang12SmHm(PrimGalpropModel):
             'gamma_5':0.02,
             'pt':np.inf,
             'c':1.0,
-            'scatter_model_param1': 0.173
+            'log_scatter': 0.173
             }
         elif (fit_type == 'FIT-2PCF') & (fit_smf=='SMF2') & (fit_cosmo=='WMAP7'):
             d = {
@@ -582,7 +587,7 @@ class Yang12SmHm(PrimGalpropModel):
             'gamma_5':0.04,
             'pt':1.18,
             'c':0.91,
-            'scatter_model_param1': 0.173
+            'log_scatter': 0.173
             }
         elif (fit_type == 'FIT-CSMF') & (fit_smf=='SMF2') & (fit_cosmo=='WMAP7'):
             d = {
@@ -597,7 +602,7 @@ class Yang12SmHm(PrimGalpropModel):
             'gamma_5':0.01,
             'pt':0.88,
             'c':0.98,
-            'scatter_model_param1': 0.173
+            'log_scatter': 0.173
             }
         else:
             raise ValueError("default fit parameters not recognized.")
