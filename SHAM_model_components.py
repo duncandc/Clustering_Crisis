@@ -32,7 +32,7 @@ class RankSmHm(object):
     def __init__(self,
                  prim_haloprop_key = 'halo_mpeak',
                  stellar_mass_function = 'LiWhite_2009',
-                 scatter = 0.2,
+                 log_scatter = 0.0,
                  Lbox = 250.0,
                  **kwargs):
         """
@@ -61,7 +61,7 @@ class RankSmHm(object):
         self._prim_haloprop_key = prim_haloprop_key
         self.stellar_mass_function = stellar_mass_function
         self._Lbox = Lbox
-        self.param_dict = {'scatter':scatter}
+        self.param_dict = {'log_scatter':log_scatter}
         
         #select stellar mass function
         if self.stellar_mass_function == 'LiWhite_2009':
@@ -92,9 +92,9 @@ class RankSmHm(object):
         #mstar = np.sort(mstar)
         galaxy_sort_inds = np.argsort(mstar)
         
-        if self.param_dict['scatter']>0.0:
+        if self.param_dict['log_scatter']>0.0:
             #add scatter in steps.  choose step size
-            sub_scatter = self.param_dict['scatter']/5.0
+            sub_scatter = self.param_dict['log_scatter']/5.0
             
             #find where the log mass changes by the scatter
             mass = np.log10(mstar)
