@@ -28,7 +28,7 @@ Campbell et al. (2017), ["The Galaxy Clustering Crisis in Abundance Matching"](h
 
 **notebooks** : contains ipython notebooks used for the analysis
 
-**paper** : contains tex files necessary toi compile the paper
+**paper** : contains tex files necessary to compile the paper
 
 **figures** : contains figures created during the analysis
 
