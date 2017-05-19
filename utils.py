@@ -5,6 +5,8 @@ utility functons
 import numpy as np
 from scipy.special import erfinv
 
+__all__ = ['scatter_ranks','gaussian_transform','table_to_array']
+
 def scatter_ranks(arr, sigma):
     """
     Scatter the index of values in an array.
