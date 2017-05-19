@@ -33,6 +33,8 @@ Campbell et al. (2017), ["The Galaxy Clustering Crisis in Abundance Matching"](h
 **figures** : contains figures created during the analysis
 
 
+The data products associated with this paper can be found ["here"](http://www.astro.yale.edu/campbell/Data.html).
+
 <br><br> 
 The analysis requires halotools among other standard Python packages.
 
