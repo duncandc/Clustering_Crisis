@@ -6,7 +6,7 @@ Campbell et al. (2017), ["The Galaxy Clustering Crisis in Abundance Matching"](h
 
 <br><br> 
 
-![Alt text](https://github.com/duncandc/Clustering_Crisis/blob/master/figures/SHAM_models_venn_diagram.pdf "Venn Disgram")
+[embed](https://github.com/duncandc/Clustering_Crisis/blob/master/figures/SHAM_models_venn_diagram.pdf)[/embed]
 
 <br><br> 
 ### Files
