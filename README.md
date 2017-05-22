@@ -13,13 +13,15 @@ Campbell et al. (2017), ["The Galaxy Clustering Crisis in Abundance Matching"](h
 
 ```Halo_model_components.py``` contains classes for dark component models
 
+```fiducial_models.py``` builds fiducial component models
+
 ```make_fiducial_SHAM_mocks.py``` creates a fiducial mock for each model
 
-```utils.py``` contains some utility functions used in this work
+```utils.py``` contains some utility functions used in this project
 
 ```cosmo_utils.py``` contains some cosmology functions
 
-```default.py``` contains some default filepaths and fiducial models
+```default.py``` contains some default filepaths
 
 <br><br> 
 ### Directories
