@@ -8,6 +8,7 @@ from __future__ import print_function, division
 import sys
 sys.path.append(".") #Place the project directory in the python path
 from default import PROJECT_DIRECTORY, DATA_DIRECTORY
+from utils import  load_project_halocat
 #import standard packages
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,10 +21,7 @@ def main():
     from halotools import sim_manager
     
     #load halo catalogue
-    print("loading Halo catalogue...")
-    simname = 'bolshoi_250'
-    halocat = sim_manager.CachedHaloCatalog(simname = simname, redshift=0.0, dz_tol = 0.001,
-                                            version_name='custom', halo_finder='Rockstar')
+    halocat = load_project_halocat(simname='bolshoi_250', version_name='custom', redshift=0.0)
     Nhalo = len(halocat.halo_table)
     
     from astropy.cosmology import FlatLambdaCDM
@@ -62,35 +60,35 @@ def main():
     halocat.halo_table['halo_mpeak180b'] = m180b
     
     #create RM mock
-    from default import composite_model_1
+    from fiducial_models import composite_model_1
     composite_model_1.populate_mock(halocat = halocat)
     print("building RM mock...")
     mock_1 = composite_model_1.mock.galaxy_table
     print("     number of galaxies: {0}".format(len(mock_1)))
     
     #create RV mock
-    from default import composite_model_2
+    from fiducial_models import composite_model_2
     composite_model_2.populate_mock(halocat = halocat)
     print("building RV mock...")
     mock_2 = composite_model_2.mock.galaxy_table
     print("     number of galaxies: {0}".format(len(mock_2)))
     
     #create M13 mock
-    from default import composite_model_3
+    from fiducial_models import composite_model_3
     composite_model_3.populate_mock(halocat = halocat)
     print("building M13 mock...")
     mock_3 = composite_model_3.mock.galaxy_table
     print("     number of galaxies: {0}".format(len(mock_3)))
     
     #create Y12 mock
-    from default import composite_model_4
+    from fiducial_models import composite_model_4
     composite_model_4.populate_mock(halocat = halocat)
     print("building Y12 mock...")
     mock_4 = composite_model_4.mock.galaxy_table
     print("     number of galaxies: {0}".format(len(mock_4)))
     
     #create M13 mock
-    from default import composite_model_5
+    from fiducial_models import composite_model_5
     composite_model_5.populate_mock(halocat = halocat)
     print("building B13 mock...")
     mock_5 = composite_model_5.mock.galaxy_table

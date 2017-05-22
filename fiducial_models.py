@@ -1,26 +1,6 @@
 import os
 import numpy as np
-
-PROJECT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))+'/'
-
-#DATA_DIRECTORY = PROJECT_DIRECTORY + 'data/'
-DATA_DIRECTORY = '/Volumes/burt/bam_data/'
-
-#list available halo catalogues
-avail_halocats = {'fnames':['bolshoi_250_w_clones_ptcl.hdf5',
-                            'bolshoi_250_w_clones_sub.hdf5',
-                            'hlist_1.00035.list_custom.hdf5',
-                            'hlist_0.80235.list_custom.hdf5',
-                            'hlist_0.59835.list_custom.hdf5',
-                            'hlist_0.49835.list_custom.hdf5'],
-                  'redshifts':np.array([-0.00034987754286008865,
-                                        -0.00034987754286008865,
-                                        -0.00034987754286008865,
-                                        0.24633887954134726,
-                                        0.6712626389237066,
-                                        1.0066218521119694])
-                 }
-
+from default import *
 
 #set default models
 from halotools.empirical_models import SubhaloModelFactory
