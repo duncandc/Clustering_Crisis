@@ -1,0 +1,5 @@
+version_name simname fname halo_finder redshift
+custom bolshoi_250 hlist_1.00035.list_custom.hdf5 Rockstar -0.0003
+custom bolshoi_250 hlist_0.88035.list_custom.hdf5 Rockstar 0.1359
+custom bolshoi_250 hlist_0.59835.list_custom.hdf5 Rockstar 0.6713
+custom bolshoi_250 hlist_0.49835.list_custom.hdf5 Rockstar 1.0066
