@@ -15,12 +15,11 @@ from warnings import warn
 
 from utils import table_to_array
 
+from default import PROJECT_DIRECTORY
 from astropy.cosmology import FlatLambdaCDM
 default_cosmo = FlatLambdaCDM(H0=70, Om0=0.3)
 
 __all__ = ['HaloProps', 'Orphans', 'PWGH',  'MAH', 'Continued_Growth']
-
-PROJECT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))+'/'
 
 class HaloProps(object):
     """

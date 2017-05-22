@@ -9,7 +9,8 @@ from halotools.sim_manager import UserSuppliedHaloCatalog
 import h5py
 from astropy.table import Table
 
-__all__ = ['scatter_ranks','gaussian_transform','table_to_array','load_halocat']
+
+__all__ = ['scatter_ranks','gaussian_transform','table_to_array','load_project_halocat']
 
 
 def load_project_halocat(simname='bolshoi_250', version_name='custom', halo_finder='Rockstar',
@@ -97,6 +98,7 @@ def load_project_halo_catalogue_cache_table(PROJECT_DIRECTORY):
         names=['version_name','simname','fname','halo_finder','redshift'],format='ascii')
     
     return t
+
 
 def scatter_ranks(arr, sigma):
     """
